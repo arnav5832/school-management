@@ -1,0 +1,141 @@
+{
+  "info": {
+    "_postman_id": "school-mgmt-api-v1",
+    "name": "School Management API",
+    "description": "Complete Postman collection for the School Management API.\n\nEndpoints:\n- POST /addSchool — Add a new school\n- GET  /listSchools — List schools sorted by proximity\n\nBase URL: Set the {{baseUrl}} variable to your server, e.g. http://localhost:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Verify the server is running."
+      }
+    },
+    {
+      "name": "Add School",
+      "item": [
+        {
+          "name": "Add School — Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Delhi Public School\",\n  \"address\": \"Mathura Road, New Delhi, Delhi 110003\",\n  \"latitude\": 28.6139,\n  \"longitude\": 77.2090\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addSchool",
+              "host": ["{{baseUrl}}"],
+              "path": ["addSchool"]
+            },
+            "description": "Adds a new school in Delhi to the database."
+          }
+        },
+        {
+          "name": "Add School — Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Incomplete School\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addSchool",
+              "host": ["{{baseUrl}}"],
+              "path": ["addSchool"]
+            }
+          }
+        },
+        {
+          "name": "Add School — Invalid Coordinates",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bad Coords School\",\n  \"address\": \"1 Test Street, Delhi\",\n  \"latitude\": 999,\n  \"longitude\": -999\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addSchool",
+              "host": ["{{baseUrl}}"],
+              "path": ["addSchool"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Schools",
+      "item": [
+        {
+          "name": "List Schools — Near Central Delhi",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/listSchools?latitude=28.6139&longitude=77.2090",
+              "host": ["{{baseUrl}}"],
+              "path": ["listSchools"],
+              "query": [
+                { "key": "latitude", "value": "28.6139" },
+                { "key": "longitude", "value": "77.2090" }
+              ]
+            },
+            "description": "Fetch schools sorted by proximity to Central Delhi."
+          }
+        },
+        {
+          "name": "List Schools — Near South Delhi",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/listSchools?latitude=28.5245&longitude=77.2066",
+              "host": ["{{baseUrl}}"],
+              "path": ["listSchools"],
+              "query": [
+                { "key": "latitude", "value": "28.5245" },
+                { "key": "longitude", "value": "77.2066" }
+              ]
+            },
+            "description": "Fetch schools sorted by proximity to South Delhi."
+          }
+        },
+        {
+          "name": "List Schools — Missing Params",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/listSchools",
+              "host": ["{{baseUrl}}"],
+              "path": ["listSchools"]
+            },
+            "description": "Validation error when latitude and longitude are missing."
+          }
+        }
+      ]
+    }
+  ]
+}
